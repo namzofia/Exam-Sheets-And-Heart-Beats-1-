@@ -28,6 +28,8 @@ label start:
 
     e "This is a test!"
 
+    e "meow"
+
     # This ends the game.
 
     return
