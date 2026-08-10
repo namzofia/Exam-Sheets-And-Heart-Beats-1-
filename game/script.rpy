@@ -30,6 +30,8 @@ label start:
 
     e "meow"
 
+    e "heheheheheheheheehehheheheheehehehehehehehehehehehehehehe"
+
     # This ends the game.
 
     return
