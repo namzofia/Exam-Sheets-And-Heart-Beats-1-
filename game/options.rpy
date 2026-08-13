@@ -40,7 +40,7 @@ define gui.about = _p("""
 define build.name = "ExamSheetsandHeartBeats"
 
 
-## Sounds and music ############################################################
+##### Sounds and music ############################################################
 
 ## These three variables control, among other things, which mixers are shown
 ## to the player by default. Setting one of these to False will hide the
