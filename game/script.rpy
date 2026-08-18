@@ -1,37 +1,67 @@
-﻿# The script of the game goes in this file.
+﻿#script for the game goes here!
 
-# Declare characters used by this game. The color argument colorizes the
-# name of the character.
+#declairing the characters
+define e = Character("Eliza", color="#F8C8DC") 
+define k = Character("Kristen", color="#cfb6e4") 
+define t = Character("Thomas", color="#abc4ea") 
 
-define e = Character("Eliza", color="#F8C8DC")
+#function to help the sprites scale down 
+transform fbSpriteSize: 
+    #makes it smaller since image is very big
+    zoom 0.5 
+    xpos 0.04
+transform spriteSize: 
+    zoom 0.5
+transform buttonSize: 
+    zoom 0.6
+transform bgSize: 
+    #makes the background the perfect size in the middle
+    zoom 0.8
+    xanchor 0.5  
+    xpos 0.5     
+    yanchor 0.5  
+    ypos 0.5 
+
+#main menu with all the stats, buttons, ect
+screen mainmenu(): 
+    #resizes it to be in the right place 
+    vbox: 
+        xalign 0.55
+        yalign 0.7
+        spacing 40
+
+        #shows the buttons on the UI
+        imagebutton  at buttonSize: 
+            idle "actions"
+            hover "actions_hvr" #changed the colour when hovering 
+            action Jump("actionsMenu") #brings user to label
+
+        imagebutton  at buttonSize:
+            idle "relationships"
+            hover "relationships_hvr"
+            action Jump("rsMenu")
+        
+        imagebutton  at buttonSize:
+            idle "learnings"
+            hover "learnings_hvr"
+            action Jump("learningsMenu")
 
 
-# The game starts here.
 
-label start:
+label start: 
+    scene classroom at bgSize
+    show eliza fb neutral at fbSpriteSize
 
-    # Show a background. This uses a placeholder by default, but you can
-    # add a file (named either "bg room.png" or "bg room.jpg") to the
-    # images directory to show it.
+    call screen mainmenu
 
-    scene bg room
+label actionsMenu:
+    "You opened the Actions menu!"
+label rsMenu:
+    "You opened the Relationships menu!"
+label learningsMenu:
+    "You opened the Learnings menu!"
 
-    # This shows a character sprite. A placeholder is used, but you can
-    # replace it by adding a file named "eileen happy.png" to the images
-    # directory.
-
-    show eliza neutral
-
-    # These display lines of dialogue.
-
-    e "Nice to meet you"
-
-    e "This is a test!"
-
-    e "meow"
-
-    e "heheheheheheheheehehheheheheehehehehehehehehehehehehehehe"
-
-    # This ends the game.
+#dialogue lines!!
+    #e "Nice to meet you"
 
     return
