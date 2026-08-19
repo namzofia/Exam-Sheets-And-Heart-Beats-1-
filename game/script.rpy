@@ -21,9 +21,16 @@ transform bgSize:
     xpos 0.5     
     yanchor 0.5  
     ypos 0.5 
+#perfect place for the x
+transform xSize:
+    zoom 0.45
+    xpos 0.708
+    ypos 0.2488
+
+
 
 #main menu with all the stats, buttons, ect
-screen mainmenu(): 
+screen cs_mainmenu(): 
     #resizes it to be in the right place 
     vbox: 
         xalign 0.55
@@ -31,37 +38,60 @@ screen mainmenu():
         spacing 40
 
         #shows the buttons on the UI
-        imagebutton  at buttonSize: 
+        imagebutton at buttonSize: 
             idle "actions"
             hover "actions_hvr" #changed the colour when hovering 
-            action Jump("actionsMenu") #brings user to label
+            action Show("actionsPopup") #brings user to label
 
-        imagebutton  at buttonSize:
+        imagebutton at buttonSize:
             idle "relationships"
             hover "relationships_hvr"
-            action Jump("rsMenu")
+            action Show("rsPopup")
         
-        imagebutton  at buttonSize:
+        imagebutton at buttonSize:
             idle "learnings"
             hover "learnings_hvr"
-            action Jump("learningsMenu")
+            action Show("learningsPopup")
 
+#---------------------------------------------------------------------------------------------------------------
 
+#this is where all the actions can be seen
+screen actionsPopup():
+    modal True #so that you can't interact outside of it
+    add "actions_pop" align (0.5, 0.5) at buttonSize
 
+    imagebutton at xSize: #makes the x button 
+        idle "x"
+        hover "x_hvr"
+        action Hide("actionsPopup") #hides the pop up
+#--------
+screen rsPopup():
+    modal True #so that you can't interact outside of it
+    add "relationships_pop" align (0.5, 0.5) at buttonSize
+
+    imagebutton at xSize:
+        idle "x"
+        hover "x_hvr"
+        action Hide("rsPopup")
+#--------
+screen learningsPopup():
+    modal True #so that you can't interact outside of it
+    add "learnings_pop" align (0.5, 0.5) at buttonSize
+    text "Sorry! \n Nothing to see here! :)":
+        align (0.5, 0.5)
+        size 50
+        color "#3d2727" # dark text for contrast
+
+    imagebutton at xSize:
+        idle "x"
+        hover "x_hvr"
+        action Hide("learningsPopup")
+
+#-------------------------------------------------------------------------------------------------------------------
 label start: 
     scene classroom at bgSize
     show eliza fb neutral at fbSpriteSize
 
-    call screen mainmenu
-
-label actionsMenu:
-    "You opened the Actions menu!"
-label rsMenu:
-    "You opened the Relationships menu!"
-label learningsMenu:
-    "You opened the Learnings menu!"
-
-#dialogue lines!!
-    #e "Nice to meet you"
+    call screen cs_mainmenu
 
     return
