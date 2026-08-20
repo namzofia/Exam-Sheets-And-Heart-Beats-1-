@@ -56,14 +56,12 @@ define gui.interface_text_color = '#404040'
 
 ## Fonts and Font Sizes ########################################################
 
-## The font used for in-game text.
-define gui.text_font = "PixelifySans-VariableFont_wght.ttf"
+# Set your main font
+define gui.text_font = "fonts/static/PixelifySans-Regular.ttf"
+define gui.name_text_font = "fonts/static/PixelifySans-Regular.ttf"
+define gui.interface_text_font = "fonts/static/PixelifySans-Regular.ttf"
 
-## The font used for character names.
-define gui.name_text_font = "PixelifySans-VariableFont_wght.ttf"
 
-## The font used for out-of-game text.
-define gui.interface_text_font = "DejaVuSans.ttf"
 
 ## The size of normal dialogue text.
 define gui.text_size = 33
