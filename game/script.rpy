@@ -14,6 +14,7 @@ transform spriteSize:
     zoom 0.5
 transform buttonSize: 
     zoom 0.6
+    align (0.5, 0.5)
 transform bgSize: 
     #makes the background the perfect size in the middle
     zoom 0.8
@@ -58,7 +59,7 @@ screen cs_mainmenu():
 #this is where all the actions can be seen
 screen actionsPopup():
     modal True #so that you can't interact outside of it
-    add "actions_pop" align (0.5, 0.5) at buttonSize
+    add "actions_pop" at buttonSize
 
     imagebutton at xSize: #makes the x button 
         idle "x"
@@ -67,7 +68,7 @@ screen actionsPopup():
 #--------
 screen rsPopup():
     modal True #so that you can't interact outside of it
-    add "relationships_pop" align (0.5, 0.5) at buttonSize
+    add "relationships_pop" at buttonSize
 
     imagebutton at xSize:
         idle "x"
@@ -76,7 +77,7 @@ screen rsPopup():
 #--------
 screen learningsPopup():
     modal True #so that you can't interact outside of it
-    add "learnings_pop" align (0.5, 0.5) at buttonSize
+    add "learnings_pop" at buttonSize
     text "Sorry! \n Nothing to see here! :)":
         align (0.5, 0.5)
         size 50
