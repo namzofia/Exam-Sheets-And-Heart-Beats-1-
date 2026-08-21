@@ -27,11 +27,37 @@ transform xSize:
     zoom 0.45
     xpos 0.708
     ypos 0.2488
+transform clockSize:
+    zoom 0.6
+    xanchor -1
+    xpos 0.73    
+    yanchor 0.5  
+    ypos 0.5 
+
+#---------------------------------------------------------------------------------------------------------
+#TIME AND STATS
+
+#trakcs statistics
+default Energy = 90
+default Social = 50
+default Readiness = 10
+default Focus = 10
+default current_time = 6
+
 
 
 
 #main menu with all the stats, buttons, ect
 screen cs_mainmenu(): 
+
+    # --- DYNAMIC CLOCK DISPLAY ---
+    if current_time <= 11:
+        add "[current_time]am" at clockSize
+    elif current_time == 12:
+        add "12pm"  at clockSize
+    else:
+        add "[pm_time]pm" at clockSize
+
     #resizes it to be in the right place 
     vbox: 
         xalign 0.55
@@ -90,9 +116,9 @@ screen learningsPopup():
 
 #-------------------------------------------------------------------------------------------------------------------
 label start: 
-    scene classroom at bgSize
-    show eliza fb neutral at fbSpriteSize
+    scene bedroom at bgSize
+    show eliza fb sleep neutral at fbSpriteSize
 
     call screen cs_mainmenu
-
+    
     return
