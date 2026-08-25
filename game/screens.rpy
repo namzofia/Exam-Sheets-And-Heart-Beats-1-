@@ -96,19 +96,25 @@ style frame:
 ## https://www.renpy.org/doc/html/screen_special.html#say
 
 screen say(who, what):
+    style_prefix "say"
 
     window:
         id "window"
 
-        if who is not None:
+        # --- CHARACTER NAME ("Eliza") ---
+        if who:
+            text who id "who":
+                size 46              # Kept size legible
+                xpos 340            # Shifted left to center inside the pink box
+                ypos 40             # Pushes name down into the box center
+                xanchor 0.5          # Center anchor point
 
-            window:
-                id "namebox"
-                style "namebox"
-                text who id "who"
-
-        text what id "what"
-
+        # --- DIALOGUE TEXT ---
+        text what id "what":
+            size 38                  # Increased dialogue size
+            xpos 130                  # Nudged slightly right for a clean margin
+            ypos 95              # Kept height centered in the frame
+            xmaximum 1050
 
     ## If there's a side image, display it above the text. Do not display on the
     ## phone variant - there's no room.

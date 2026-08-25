@@ -63,11 +63,19 @@ define gui.interface_text_font = "fonts/static/PixelifySans-Regular.ttf"
 
 
 
-## The size of normal dialogue text.
-define gui.text_size = 33
+## Dialogue Text Size
+# Reduce dialogue size slightly so it fits inside the frame cleanly
+define gui.text_size = 26
 
-## The size of character names.
-define gui.name_text_size = 45
+## Namebox Text Size
+# Increase name text size slightly for better visibility
+define gui.name_text_size = 28
+
+## Dialogue Box Text Alignment & Padding
+# Adjust xpos/ypos to push the text down and away from the top frame border
+define gui.dialogue_xpos = 80
+define gui.dialogue_ypos = 60
+define gui.dialogue_width = 1100
 
 ## The size of text in the game's user interface.
 define gui.interface_text_size = 33
