@@ -20,6 +20,10 @@ transform elizaSize:
     zoom 0.2
     ypos 0.14
     xpos 0.04
+transform npcSize:
+    zoom 0.28
+    ypos 0.15
+    xpos 0.69
 transform buttonSize: 
     zoom 0.6
     align (0.5, 0.5)
@@ -40,7 +44,12 @@ transform clockSize:
     xanchor -1
     xpos 0.73    
     yanchor 0.5  
-    ypos 0.5 
+    ypos 0.65
+transform barSize:
+    zoom 0.6
+    xpos 0.07
+transform actionSize:
+    zoom 0.35
 
 #---------------------------------------------------------------------------------------------------------
 #TIME AND STATS
@@ -50,8 +59,8 @@ default Energy = 90
 default Social = 50
 default Readiness = 10
 default Focus = 10
-default current_time = 6
-
+default currentTime = 6
+default selectedAction = "" #to choose the action
 
 
 
@@ -59,12 +68,39 @@ default current_time = 6
 screen cs_mainmenu(): 
 
     # Chaning clock display
-    if current_time <= 11:
-        add "[current_time]am" at clockSize
-    elif current_time == 12:
+    if currentTime <= 11:
+        add "[currentTime]am" at clockSize
+    elif currentTime == 12:
         add "12pm"  at clockSize
     else:
         add "[pm_time]pm" at clockSize
+
+    #BAR STATS
+    vbox:
+        xpos 690   
+        ypos 150             
+        spacing 15
+
+        hbox:
+            spacing 10
+            text "Energy       " size 30 color "#3a2b2b"
+            add "[Energy]bar" at barSize
+
+        hbox:
+            spacing 10
+            text "Readiness" size 30 color "#3a2b2b"
+            add "[Readiness]bar" at barSize
+
+        hbox:
+            spacing 10
+            text "Social          " size 30 color "#3a2b2b"
+            add "[Social]bar" at barSize
+
+        hbox:
+            spacing 10
+            text "Focus          " size 30 color "#3a2b2b"
+            add "[Focus]bar" at barSize
+
 
     #resizes it to be in the right place 
     vbox: 
@@ -104,15 +140,8 @@ transform charShake:
 
 #---------------------------------------------------------------------------------------------------------------
 
-#this is where all the actions can be seen
-screen actionsPopup():
-    modal True #so that you can't interact outside of it
-    add "actions_pop" at buttonSize
 
-    imagebutton at xSize: #makes the x button 
-        idle "x"
-        hover "x_hvr"
-        action Hide("actionsPopup") #hides the pop up
+
 #--------
 screen rsPopup():
     modal True #so that you can't interact outside of it
@@ -138,6 +167,104 @@ screen learningsPopup():
 
 define config.default_textshader = "typewriter"
 
+#-----------------------------------------------------------------------------------DAMAGE CONTROL
+#====================================================================================================
+
+
+
+
+
+# This is so that all the actions can be seen 
+screen actionsPopup():
+    modal True # so that you can't interact outside of it
+    
+    # The background image (like the other pop ups)
+    add "actions_pop" at buttonSize
+
+    # So that it can close using the x 
+    imagebutton at xSize: # makes the x button
+        idle "x"
+        hover "x_hvr"
+        action Hide("actionsPopup") # hides the pop up
+
+# Action buttons placement being in 2x2 
+    grid 2 2 at actionSize:
+        xalign 0.5
+        yalign 0.55  
+        spacing 40   
+
+        # 6 AM Actions (4 items total)
+        if currentTime == 6:
+            imagebutton idle "6amstudy" hover "6amstudy_hvr" action [SetVariable("selectedAction", "6amStudy"), Show("resultTestPopup")]
+            imagebutton idle "6amkristen" hover "6amkristen_hvr" action [SetVariable("selectedAction", "6amKristen"), Show("resultTestPopup")]
+            imagebutton idle "6amsleep" hover "6amsleep_hvr" action [SetVariable("selectedAction", "6amSleep"), Show("resultTestPopup")]
+            imagebutton idle "6amthomas" hover "6amthomas_hvr" action [SetVariable("selectedAction", "6amThomas"), Show("resultTestPopup")]
+
+        # 8 AM Actions (If fewer than 4 items, fill remaining slots with null)
+        elif currentTime == 8:
+            imagebutton idle "8amschool" hover "8amschool_hvr" action [SetVariable("selectedAction", "8amSchool"), Show("resultTestPopup")]
+            null #since there's only 3 options)
+            null
+            null
+
+        # 9 AM Actions
+        elif currentTime == 9:
+            imagebutton idle "9amstudy" hover "9amstudy_hvr" action [SetVariable("selectedAction", "9amStudy"), Show("resultTestPopup")]
+            imagebutton idle "9amkristen" hover "9amkristen_hvr" action [SetVariable("selectedAction", "9amKristen"), Show("resultTestPopup")]
+            imagebutton idle "9amthomas" hover "9amthomas_hvr" action [SetVariable("selectedAction", "9amThomas"), Show("resultTestPopup")]
+            null
+
+        # 1 PM Actions
+        elif currentTime == 13:
+            imagebutton idle "1pmkristen" hover "1pmkristen_hvr" action [SetVariable("selectedAction", "1pmKristen"), Show("resultTestPopup")]
+            imagebutton idle "1pmnap" hover "1pmnap_hvr" action [SetVariable("selectedAction", "1pmNap"), Show("resultTestPopup")]
+            imagebutton idle "1pmstudy" hover "1pmstudy_hvr" action [SetVariable("selectedAction", "1pmStudy"), Show("resultTestPopup")]
+            null
+
+        # 2 PM Actions
+        elif currentTime == 14:
+            imagebutton idle "2pmcram" hover "2pmcram_hvr" action [SetVariable("selectedAction", "2pmCram"), Show("resultTestPopup")]
+            imagebutton idle "2pmkristen" hover "2pmkristen_hvr" action [SetVariable("selectedAction", "2pmKristen"), Show("resultTestPopup")]
+            imagebutton idle "2pmthomas" hover "2pmthomas_hvr" action [SetVariable("selectedAction", "2pmThomas"), Show("resultTestPopup")]
+            null
+
+
+# --- POPUP 2: TEST PASS/FAIL OVERLAY ---
+screen resultTestPopup():
+    modal True
+    add "#00000088"
+
+    frame:
+        xalign 0.5
+        yalign 0.5
+        padding (30, 20)
+        
+        vbox:
+            spacing 20
+            text "Test Outcome:" xalign 0.5 size 22 color "#ffffff"
+            
+            hbox:
+                spacing 40
+                
+                # Checkmark Button (PASS)
+                imagebutton idle "correct":
+                    action [
+                        Hide("resultTestPopup"), 
+                        Hide("actionsPopup"), 
+                        Jump("act" + selectedAction + "Pass")
+                    ]
+                
+                # X Button (FAIL)
+                imagebutton idle "incorrect":
+                    action [
+                        Hide("resultTestPopup"), 
+                        Hide("actionsPopup"), 
+                        Jump("act" + selectedAction + "Fail")
+                    ]
+
+
+
+#====================================================================================================
 #-------------------------------------------------------------------------------------------------------------------
 label start: 
 
@@ -172,4 +299,34 @@ label start:
 
     call screen cs_mainmenu with fade
     
-    return
+
+
+
+
+    #STAT CHECKER - END GAME OR PAUSE AT 100
+    
+    label goBack:
+    # cap so that it doesn't exceed 100
+    $ Energy = min(100, Energy)
+    $ Readiness = min(100, Readiness)
+    $ Social = min(100, Social)
+    $ Focus = min(100, Focus)
+
+    # chacks if the stats go bellow 0 cuz then it ends the game
+    if Energy < 0 or Readiness < 0 or Social < 0 or Focus < 0:
+        jump gameOver
+
+    # ends the game at 3 (Exam time)
+    if currentTime >= 15:
+        jump finalExam_scene
+    else:
+        call screen cs_mainmenu
+
+
+    label gameOver:
+        scene bedroom with dissolve
+        "Eliza completely burned out before taking her exam..."
+        "GAME OVER"
+        return  # Returns to main menu title screen
+
+
