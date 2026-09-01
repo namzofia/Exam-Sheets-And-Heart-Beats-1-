@@ -24,6 +24,10 @@ transform npcSize:
     zoom 0.28
     ypos 0.15
     xpos 0.69
+transform npc2Size:
+    zoom 0.3
+    ypos 0.1
+    xpos 0.63
 transform buttonSize: 
     zoom 0.6
     align (0.5, 0.5)
@@ -212,6 +216,27 @@ screen actionsPopup():
             imagebutton idle "9amstudy" hover "9amstudy_hvr" action [SetVariable("selectedAction", "9amStudy"), Show("resultTestPopup")]
             imagebutton idle "9amkristen" hover "9amkristen_hvr" action [SetVariable("selectedAction", "9amKristen"), Show("resultTestPopup")]
             imagebutton idle "9amthomas" hover "9amthomas_hvr" action [SetVariable("selectedAction", "9amThomas"), Show("resultTestPopup")]
+            null
+
+        # 10 AM Actions
+        elif currentTime == 10:
+            imagebutton idle "10amkristen" hover "10amkristen_hvr" action [SetVariable("selectedAction", "10amKristen"), Show("resultTestPopup")]
+            imagebutton idle "10amstudy" hover "10amstudy_hvr" action [SetVariable("selectedAction", "10amStudy"), Show("resultTestPopup")]
+            imagebutton idle "10amthomas" hover "10amthomas_hvr" action [SetVariable("selectedAction", "10amThomas"), Show("resultTestPopup")]
+            null
+
+        # 11 AM Actions
+        elif currentTime == 11:
+            imagebutton idle "11amkristen" hover "11amkristen_hvr" action [SetVariable("selectedAction", "11amKristen"), Show("resultTestPopup")]
+            imagebutton idle "11amstudy" hover "11amstudy_hvr" action [SetVariable("selectedAction", "11amStudy"), Show("resultTestPopup")]
+            imagebutton idle "11amthomas" hover "11amthomas_hvr" action [SetVariable("selectedAction", "11amThomas"), Show("resultTestPopup")]
+            null
+
+        # 12 PM Actions
+        elif currentTime == 12:
+            imagebutton idle "12pminsta" hover "12pminsta_hvr" action [SetVariable("selectedAction", "12pmInsta"), Show("resultTestPopup")]
+            imagebutton idle "12pmkristen" hover "12pmkristen_hvr" action [SetVariable("selectedAction", "12pmKristen"), Show("resultTestPopup")]
+            imagebutton idle "12pmstudy" hover "12pmstudy_hvr" action [SetVariable("selectedAction", "12pmStudy"), Show("resultTestPopup")]
             null
 
         # 1 PM Actions

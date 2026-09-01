@@ -3,14 +3,14 @@
 # =========================================================
 
 # --- 1. Do Last Minute Cram Study ---
-label act2pmKristenPass:
+label act2pmStudyPass:
     $ Energy -= 20
     $ Social += 0
     $ Readiness += 30
     $ Focus += 10
     $ currentTime += 1
 
-    scene school front with dissolve
+    scene library at bgSize with dissolve
     "You memorized all your notes!!! (  • u •  )"
     "You got: -20 Energy, +0 Social, +30 Readiness, +10 Focus"
 
@@ -18,20 +18,20 @@ label act2pmKristenPass:
     show eliza fb neutral at fbSpriteSize with fade
     jump goBack
 
-label act2pmKristenFail:
+label act2pmStudyFail:
     $ Energy -= 10
     $ Social += 0
     $ Readiness -= 10
     $ Focus -= 30
     $ currentTime += 1
 
-    scene school front with dissolve
+    scene library at bgSize with dissolve
     "You forgot everything because of how nervous you were and there’s no time to study!! (•- •;)"
     "You got: -10 Energy, +0 Social, -10 Readiness, -30 Focus"
 #finished bit above
 
 # --- 2. Hype Thomas up before his exam ---
-label act2pmKristenPass:
+label act2pmThomasPass:
     $ Energy += 10
     $ Social += 20
     $ Readiness += 0
@@ -43,6 +43,15 @@ label act2pmKristenPass:
     show eliza lovesmilepray at elizaSize with dissolve
     e "Good luck Thomas!"
     t "Thanks, you too, Eliza"
+    show thomas bigsmile at npc2Size
+    show eliza blushsmile at elizaSize
+    "..."
+    show thomas embarrassed at npc2Size
+    show eliza embarrassed at elizaSize
+    ".................."
+    t "oookay, see you later..!"
+    hide thomas embarrassed with dissolve
+    hide eliza embarrassed with dissolve
 
     scene classroom with dissolve
     "You got: +10 Energy, +20 Social, +0 Readiness, +10 Focus"
@@ -51,7 +60,7 @@ label act2pmKristenPass:
     show eliza fb neutral at fbSpriteSize with fade
     jump goBack
 
-label act2pmKristenFail:
+label act2pmThomasFail:
     $ Energy -= 10
     $ Social -= 10
     $ Readiness += 0

@@ -104,3 +104,79 @@ label act9amKristenFail:
     scene classroom at bgSize
     show eliza fb neutral at fbSpriteSize with fade
     jump goBack
+
+
+# --- 3. GREET THOMAS GOODMORNING :3 ---
+label act9amThomasPass:
+    $ Energy -= 10
+    $ Social += 10
+    $ Readiness += 0
+    $ Focus += 10
+    $ currentTime += 1
+    
+    scene hallway1 at bgSize with dissolve
+    "Eliza waits by Thomas' locker in the hallway, hoping he'll say hi...."
+    show thomas smilenoteeth at npc2Size with dissolve
+    show eliza neutral at elizaSize with dissolve
+    t "Hi Eliza"
+    show thomas thinsmile at npc2Size
+    show eliza blushsmile at elizaSize
+    e "Oh..! Hi Thomas!"
+    show thomas mouthopen at npc2Size
+    show eliza blushsmile at elizaSize
+    t "Ready for the exams today?"
+    show thomas thinsmile at npc2Size
+    show eliza embarrassed at elizaSize
+    e "O-oh yes..! Yes of course! How about you?"
+    show thomas hehehe at npc2Size
+    show eliza blushsmile at elizaSize
+    t "Yeah, I'm ready."
+    show thomas bigsmile at npc2Size
+    show eliza lovesmilepray at elizaSize
+    e "A-ah good luck Thomas then..!"
+    show thomas smileheart at npc2Size
+    show eliza blushsmile at elizaSize
+    t "Thanks Eliza! Catch you around later?"
+    show thomas thinsmile at npc2Size
+    show eliza lovesmilepray at elizaSize
+    e "Y-yes of course! Hehe!"
+    hide thomas with dissolve
+    hide eliza with dissolve
+    "You got: -10 Energy, +10 Social, +0 Readiness, +10 Focus"
+
+    scene classroom at bgSize
+    show eliza fb neutral at fbSpriteSize with fade
+    jump goBack
+
+label act9amThomasFail:
+    $ Energy -= 10
+    $ Social += 0
+    $ Readiness += 0
+    $ Focus -= 10
+    $ currentTime += 1
+    
+    scene hallway1 at bgSize with dissolve
+    "Eliza waits by Thomas' locker in the hallway, hoping he'll say hi...."
+    "..."
+    "He doesn't say hi! So Eliza will just approach him herself."
+    show eliza smileteeth at elizaSize with dissolve
+    show thomas neutral at npc2Size with dissolve
+    e "Hi Thomas!"
+    show eliza blushsmile at elizaSize
+    show thomas pissed at npc2Size
+    t "Oh... Hi"
+    show eliza lovesmilepray at elizaSize
+    show thomas pissed at npc2Size
+    e "How are you--"
+    hide thomas with dissolve
+    "He turns and leaves without another word."
+    show eliza shocked at elizaSize
+    e "..."
+    show eliza distraught at elizaSize
+    e "O-oh, okay, bye Thomas!"
+    hide eliza with dissolve
+    "You got: -10 Energy, +0 Social, +0 Readiness, -10 Focus"
+
+    scene classroom at bgSize
+    show eliza fb neutral at fbSpriteSize with fade
+    jump goBack
