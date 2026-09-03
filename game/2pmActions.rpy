@@ -3,7 +3,7 @@
 # =========================================================
 
 # --- 1. Do Last Minute Cram Study ---
-label act2pmStudyPass:
+label act2pmCramPass:
     $ Energy -= 20
     $ Social += 0
     $ Readiness += 30
@@ -11,14 +11,13 @@ label act2pmStudyPass:
     $ currentTime += 1
 
     scene library at bgSize with dissolve
-    "You memorized all your notes!!! (  • u •  )"
+    "Eliza only had an hour left before the exam, so she decided to try and memorise some stuff!"
+    "She did it, and now she's super ready :3"
     "You got: -20 Energy, +0 Social, +30 Readiness, +10 Focus"
 
-    scene classroom at bgSize
-    show eliza fb neutral at fbSpriteSize with fade
-    jump goBack
+    jump gameEnd
 
-label act2pmStudyFail:
+label act2pmCramFail:
     $ Energy -= 10
     $ Social += 0
     $ Readiness -= 10
@@ -26,9 +25,12 @@ label act2pmStudyFail:
     $ currentTime += 1
 
     scene library at bgSize with dissolve
-    "You forgot everything because of how nervous you were and there’s no time to study!! (•- •;)"
+    "Yikes! Eliza's getting cold feet..."
+    "She forgot everything because of how nervous she was, and there's no time to study!! (•- •;)"
     "You got: -10 Energy, +0 Social, -10 Readiness, -30 Focus"
-#finished bit above
+
+    jump gameEnd
+
 
 # --- 2. Hype Thomas up before his exam ---
 label act2pmThomasPass:
@@ -39,26 +41,26 @@ label act2pmThomasPass:
     $ currentTime += 1
 
     scene classroom with dissolve
-    show thomas hehehe at npc2Size with dissolve
+    show thomas neutral at npc2Size with dissolve
     show eliza lovesmilepray at elizaSize with dissolve
     e "Good luck Thomas!"
-    t "Thanks, you too, Eliza"
     show thomas bigsmile at npc2Size
+    show eliza neutral at elizaSize
+    t "Thanks, you too, Eliza"
+    show thomas neutral at npc2Size
     show eliza blushsmile at elizaSize
     "..."
     show thomas embarrassed at npc2Size
     show eliza embarrassed at elizaSize
     ".................."
+    show thomas smileheart at npc2Size
+    show eliza neutral at elizaSize
     t "oookay, see you later..!"
-    hide thomas embarrassed with dissolve
-    hide eliza embarrassed with dissolve
-
-    scene classroom with dissolve
+    hide thomas with dissolve
+    hide eliza with dissolve
     "You got: +10 Energy, +20 Social, +0 Readiness, +10 Focus"
 
-    scene classroom at bgSize
-    show eliza fb neutral at fbSpriteSize with fade
-    jump goBack
+    jump gameEnd
 
 label act2pmThomasFail:
     $ Energy -= 10
@@ -68,14 +70,20 @@ label act2pmThomasFail:
     $ currentTime += 1
     
     scene classroom with dissolve
-    show thomas pissed at npc2Size with dissolve
+    show thomas worried at npc2Size with dissolve
     show eliza blushsmile at elizaSize with dissolve
     e "Good luck Thomas!"
+    show thomas pissed at npc2Size
+    show eliza shocked at elizaSize
     t "Yeah whatever..."
+    hide thomas with dissolve
+    show eliza shockedpray
+    e "Oh no why does Thomas hate me...!"
+    hide eliza with dissolve
+    "You got: -10 Energy, -10 Social, +0 Readiness, -10 Focus"
 
-    scene classroom with dissolve
-    "You got:  -10 Energy, -10 Social, +0 Readiness, -10 Focus"
-#UP TO HERE
+    jump gameEnd
+
 
 # --- 3. Do a good luck ritual with Kristen ---
 label act2pmKristenPass:
@@ -86,12 +94,13 @@ label act2pmKristenPass:
     $ currentTime += 1
 
     scene classroom with dissolve
-    "They each ate a Kopiko just before the exam to keep them awake!! :P"
+    "Eliza and Kristen decided to each eat a Kopiko just before the exam to keep them awake!! :P"
+    "Now they feel super alive yaho!"
     "You got: +20 Energy, +10 Social, +10 Readiness, +10 Focus"
 
     scene classroom at bgSize
     show eliza fb neutral at fbSpriteSize with fade
-    jump goBack
+    jump gameEnd
 
 label act2pmKristenFail:
     $ Energy -= 20
@@ -101,9 +110,8 @@ label act2pmKristenFail:
     $ currentTime += 1
     
     scene classroom with dissolve
-    "Eliza and Kristen spin around 10 times clockwise then 10 times anticlockwise. But now they feel sick!! <( •-•)> "
-    "You got:  -20 Energy, +10 Social, -10 Readiness, -10 Focus"
+    "Eliza and Kristen spin around 10 times clockwise then 10 times anticlockwise.."
+    "But now they feel sick!! :((("
+    "You got: -20 Energy, +10 Social, -10 Readiness, -10 Focus"
 
-    scene classroom at bgSize
-    show eliza fb neutral at fbSpriteSize with fade
-    jump goBack
+    jump gameEnd

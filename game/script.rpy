@@ -10,6 +10,8 @@ define k = Character("Kristen", color="#8858b0")
 define t = Character("Thomas", color="#39547c") 
 
 #function to help the sprites scale down 
+transform pinkBgSize:
+    zoom 100
 transform fbSpriteSize: 
     #makes it smaller since image is very big
     zoom 0.5 
@@ -72,10 +74,11 @@ default selectedAction = "" #to choose the action
 screen cs_mainmenu(): 
 
     # Chaning clock display
+    $ pm_time = currentTime - 12
     if currentTime <= 11:
         add "[currentTime]am" at clockSize
     elif currentTime == 12:
-        add "12pm"  at clockSize
+        add "12pm" at clockSize
     else:
         add "[pm_time]pm" at clockSize
 
@@ -271,7 +274,7 @@ screen resultTestPopup():
             hbox:
                 spacing 40
                 
-                # Checkmark Button (PASS)
+                # tick Button (PASS)
                 imagebutton idle "correct":
                     action [
                         Hide("resultTestPopup"), 
@@ -279,7 +282,7 @@ screen resultTestPopup():
                         Jump("act" + selectedAction + "Pass")
                     ]
                 
-                # X Button (FAIL)
+                # x button (FAIL)
                 imagebutton idle "incorrect":
                     action [
                         Hide("resultTestPopup"), 
@@ -353,5 +356,55 @@ label start:
         "Eliza completely burned out before taking her exam..."
         "GAME OVER"
         return  # Returns to main menu title screen
+
+
+
+label gameEnd:
+    scene solid pink at pinkBgSize with dissolve
+    "The exam at 3 begins...!!"
+
+    if Energy <= 20:
+        show eliza distraught at elizaSize with dissolve
+        "Eliza is super tired...!"
+        "Halfway through question three, her head hits the desk and she passes out!"
+    elif Focus <= 20:
+        show eliza shocked at elizaSize with dissolve
+        "Oh no, Eliza can't focus at all!"
+        "Every tiny noise in the room distracts her. Hmmm, what colour is pikachu's tail again?"
+    elif Social <= 20:
+        show eliza embarrassed at elizaSize with dissolve
+        "Eliza feels super embarassed with all her terrible relationships..."
+        "Thinking about what will happen after the test makes her so nervous!!"
+    elif Readiness <= 20:
+        show eliza distraught at elizaSize with dissolve
+        "Eliza flips through the exam pages in panic..."
+        "None of these topics look familiar! She's forced to blindly guess on every single question."
+    else:
+        show eliza blushsmile at elizaSize with dissolve
+        "Eliza takes a deep breath before opening the paper..."
+        "...."
+        "Oh, she knows these topics!"
+
+    # 2. OVERALL SCORE EVALUATION
+    $ totalScore = Energy + Focus + Social + Readiness
+
+    if totalScore >= 200 and Readiness >= 50:
+        show eliza excited at elizaSize with dissolve
+        "BEST ENDING: She managed to concentrate and get through it!!"
+        "Eliza got a A+ on her test :DDDD"
+
+    elif totalScore >= 120:
+        show eliza smilenoteeth at elizaSize with dissolve
+        "GOOD ENDING: Passed!"
+        "It wasn't a perfect day, but Eliza still managed to get a passing grade anyways!"
+
+    else:
+        show eliza distraught at elizaSize with dissolve
+        "BAD ENDING: Exam Failed..."
+        "NOOOOO....."
+        "Eliza failed her exam, now she's very sad :("
+
+    "--- GAME OVER ---"
+    return
 
 
