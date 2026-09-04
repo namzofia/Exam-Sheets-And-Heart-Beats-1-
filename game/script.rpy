@@ -1,4 +1,85 @@
 ﻿#script for the game goes here!
+# Global Variables
+default persistent_study_notes = ""
+default player_answer = ""
+default ai_question = ""
+
+transform bgSize: 
+    #makes the background the perfect size in the middle
+    zoom 0.8
+    xanchor 0.5
+    xpos 0.5
+    yanchor 0.5  
+    ypos 0.5 
+
+# Input Notes Screen Definition
+screen input_notes_screen():
+    modal True
+    add "classroom" at bgSize
+    add "#3f3b3b41" # Optional dark overlay for contrast
+
+    frame:
+        xalign 0.5
+        yalign 0.5
+        padding (40, 30)
+        xsize 1100              # Expanded main frame width
+        ysize 650               # Added fixed height for scale
+        background "#ffffff"
+
+        vbox:
+            spacing 25
+            text "Paste or enter your study notes below:" color "#553a3a" size 32 xalign 0.5
+
+            frame:
+                xsize 1020      # Expanded inner box width
+                ysize 420       # Expanded inner box height
+                background "#ffe9f3"
+                padding (20, 20)
+
+                hbox:
+                    spacing 15
+
+                    viewport id "notes_vp":
+                        mousewheel True
+                        draggable True
+
+                        input:
+                            value VariableInputValue("persistent_study_notes")
+                            length 2000
+                            size 24     # Increased text font size
+                            color "#694e4e"
+                            multiline True
+
+                    vbar:
+                        value YScrollValue("notes_vp")
+                        xsize 16        # Made scrollbar wider to match
+                        base_bar Frame(Solid("#e8d8d8"), 0, 0)
+                        thumb Frame(Solid("#b58294"), 0, 0)
+                        hover_thumb Frame(Solid("#dfa0ba"), 0, 0)
+
+            hbox:
+                xalign 0.5
+                spacing 30      # More breathing room between buttons
+
+                textbutton "Paste Notes":
+                    padding (25, 12)
+                    text_size 24
+                    background "#dbe8eb"
+                    hover_background "#ebf2f6"
+                    text_color "#4a3939"
+                    action Function(paste_clipboard_to_notes)
+
+                textbutton "Start Game":
+                    padding (25, 12)
+                    text_size 24
+                    background "#ffe6ef"
+                    hover_background "#fde2f0"
+                    text_color "#4a3939"
+                    action Return()
+
+#====================================================================================================================================================================================================
+
+#====================================================================================================================================================================================================
 
 #so theres no random fade??
 define config.window_show_transition = None
@@ -33,13 +114,7 @@ transform npc2Size:
 transform buttonSize: 
     zoom 0.6
     align (0.5, 0.5)
-transform bgSize: 
-    #makes the background the perfect size in the middle
-    zoom 0.8
-    xanchor 0.5  
-    xpos 0.5     
-    yanchor 0.5  
-    ypos 0.5 
+
 #perfect place for the x
 transform xSize:
     zoom 0.45
@@ -197,109 +272,139 @@ screen actionsPopup():
 # Action buttons placement being in 2x2 
     grid 2 2 at actionSize:
         xalign 0.5
-        yalign 0.55  
+        yalign 0.55   
         spacing 40   
 
-        # 6 AM Actions (4 items total)
+        # 6 AM Actions
         if currentTime == 6:
-            imagebutton idle "6amstudy" hover "6amstudy_hvr" action [SetVariable("selectedAction", "6amStudy"), Show("resultTestPopup")]
-            imagebutton idle "6amkristen" hover "6amkristen_hvr" action [SetVariable("selectedAction", "6amKristen"), Show("resultTestPopup")]
-            imagebutton idle "6amsleep" hover "6amsleep_hvr" action [SetVariable("selectedAction", "6amSleep"), Show("resultTestPopup")]
-            imagebutton idle "6amthomas" hover "6amthomas_hvr" action [SetVariable("selectedAction", "6amThomas"), Show("resultTestPopup")]
+            imagebutton idle "6amstudy" hover "6amstudy_hvr" action [SetVariable("selectedAction", "6amStudy"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "6amkristen" hover "6amkristen_hvr" action [SetVariable("selectedAction", "6amKristen"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "6amsleep" hover "6amsleep_hvr" action [SetVariable("selectedAction", "6amSleep"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "6amthomas" hover "6amthomas_hvr" action [SetVariable("selectedAction", "6amThomas"), Hide("actionsPopup"), Jump("triggerAiAction")]
 
-        # 8 AM Actions (If fewer than 4 items, fill remaining slots with null)
+        # 8 AM Actions
         elif currentTime == 8:
-            imagebutton idle "8amschool" hover "8amschool_hvr" action [SetVariable("selectedAction", "8amSchool"), Show("resultTestPopup")]
-            null #since there's only 3 options)
+            imagebutton idle "8amschool" hover "8amschool_hvr" action [SetVariable("selectedAction", "8amSchool"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            null
             null
             null
 
         # 9 AM Actions
         elif currentTime == 9:
-            imagebutton idle "9amstudy" hover "9amstudy_hvr" action [SetVariable("selectedAction", "9amStudy"), Show("resultTestPopup")]
-            imagebutton idle "9amkristen" hover "9amkristen_hvr" action [SetVariable("selectedAction", "9amKristen"), Show("resultTestPopup")]
-            imagebutton idle "9amthomas" hover "9amthomas_hvr" action [SetVariable("selectedAction", "9amThomas"), Show("resultTestPopup")]
+            imagebutton idle "9amstudy" hover "9amstudy_hvr" action [SetVariable("selectedAction", "9amStudy"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "9amkristen" hover "9amkristen_hvr" action [SetVariable("selectedAction", "9amKristen"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "9amthomas" hover "9amthomas_hvr" action [SetVariable("selectedAction", "9amThomas"), Hide("actionsPopup"), Jump("triggerAiAction")]
             null
 
         # 10 AM Actions
         elif currentTime == 10:
-            imagebutton idle "10amkristen" hover "10amkristen_hvr" action [SetVariable("selectedAction", "10amKristen"), Show("resultTestPopup")]
-            imagebutton idle "10amstudy" hover "10amstudy_hvr" action [SetVariable("selectedAction", "10amStudy"), Show("resultTestPopup")]
-            imagebutton idle "10amthomas" hover "10amthomas_hvr" action [SetVariable("selectedAction", "10amThomas"), Show("resultTestPopup")]
+            imagebutton idle "10amkristen" hover "10amkristen_hvr" action [SetVariable("selectedAction", "10amKristen"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "10amstudy" hover "10amstudy_hvr" action [SetVariable("selectedAction", "10amStudy"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "10amthomas" hover "10amthomas_hvr" action [SetVariable("selectedAction", "10amThomas"), Hide("actionsPopup"), Jump("triggerAiAction")]
             null
 
         # 11 AM Actions
         elif currentTime == 11:
-            imagebutton idle "11amkristen" hover "11amkristen_hvr" action [SetVariable("selectedAction", "11amKristen"), Show("resultTestPopup")]
-            imagebutton idle "11amstudy" hover "11amstudy_hvr" action [SetVariable("selectedAction", "11amStudy"), Show("resultTestPopup")]
-            imagebutton idle "11amthomas" hover "11amthomas_hvr" action [SetVariable("selectedAction", "11amThomas"), Show("resultTestPopup")]
+            imagebutton idle "11amkristen" hover "11amkristen_hvr" action [SetVariable("selectedAction", "11amKristen"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "11amstudy" hover "11amstudy_hvr" action [SetVariable("selectedAction", "11amStudy"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "11amthomas" hover "11amthomas_hvr" action [SetVariable("selectedAction", "11amThomas"), Hide("actionsPopup"), Jump("triggerAiAction")]
             null
 
         # 12 PM Actions
         elif currentTime == 12:
-            imagebutton idle "12pminsta" hover "12pminsta_hvr" action [SetVariable("selectedAction", "12pmInsta"), Show("resultTestPopup")]
-            imagebutton idle "12pmkristen" hover "12pmkristen_hvr" action [SetVariable("selectedAction", "12pmKristen"), Show("resultTestPopup")]
-            imagebutton idle "12pmstudy" hover "12pmstudy_hvr" action [SetVariable("selectedAction", "12pmStudy"), Show("resultTestPopup")]
+            imagebutton idle "12pminsta" hover "12pminsta_hvr" action [SetVariable("selectedAction", "12pmInsta"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "12pmkristen" hover "12pmkristen_hvr" action [SetVariable("selectedAction", "12pmKristen"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "12pmstudy" hover "12pmstudy_hvr" action [SetVariable("selectedAction", "12pmStudy"), Hide("actionsPopup"), Jump("triggerAiAction")]
             null
 
         # 1 PM Actions
         elif currentTime == 13:
-            imagebutton idle "1pmkristen" hover "1pmkristen_hvr" action [SetVariable("selectedAction", "1pmKristen"), Show("resultTestPopup")]
-            imagebutton idle "1pmnap" hover "1pmnap_hvr" action [SetVariable("selectedAction", "1pmNap"), Show("resultTestPopup")]
-            imagebutton idle "1pmstudy" hover "1pmstudy_hvr" action [SetVariable("selectedAction", "1pmStudy"), Show("resultTestPopup")]
+            imagebutton idle "1pmkristen" hover "1pmkristen_hvr" action [SetVariable("selectedAction", "1pmKristen"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "1pmnap" hover "1pmnap_hvr" action [SetVariable("selectedAction", "1pmNap"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "1pmstudy" hover "1pmstudy_hvr" action [SetVariable("selectedAction", "1pmStudy"), Hide("actionsPopup"), Jump("triggerAiAction")]
             null
 
         # 2 PM Actions
         elif currentTime == 14:
-            imagebutton idle "2pmcram" hover "2pmcram_hvr" action [SetVariable("selectedAction", "2pmCram"), Show("resultTestPopup")]
-            imagebutton idle "2pmkristen" hover "2pmkristen_hvr" action [SetVariable("selectedAction", "2pmKristen"), Show("resultTestPopup")]
-            imagebutton idle "2pmthomas" hover "2pmthomas_hvr" action [SetVariable("selectedAction", "2pmThomas"), Show("resultTestPopup")]
+            imagebutton idle "2pmcram" hover "2pmcram_hvr" action [SetVariable("selectedAction", "2pmCram"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "2pmkristen" hover "2pmkristen_hvr" action [SetVariable("selectedAction", "2pmKristen"), Hide("actionsPopup"), Jump("triggerAiAction")]
+            imagebutton idle "2pmthomas" hover "2pmthomas_hvr" action [SetVariable("selectedAction", "2pmThomas"), Hide("actionsPopup"), Jump("triggerAiAction")]
             null
 
 
-# --- POPUP 2: TEST PASS/FAIL OVERLAY ---
+#RESULT TEST POPUP
+# RESULT TEST POPUP
 screen resultTestPopup():
     modal True
-    add "#00000088"
+    add "#e0d0d0ff"
 
     frame:
         xalign 0.5
         yalign 0.5
-        padding (30, 20)
-        
+        padding (40, 30)
+        xsize 1100              # Expanded frame width
+        background "#ffffff"
+
         vbox:
-            spacing 20
-            text "Test Outcome:" xalign 0.5 size 22 color "#ffffff"
-            
+            spacing 25
+
+            text "[ai_question]" xalign 0.5 size 26 color "#000000" text_align 0.5
+
+            frame:
+                xalign 0.5
+                xsize 1020      # Expanded input box width
+                ysize 120       # Expanded height for multiline text support
+                background "#2a2a38"
+                padding (15, 15)
+
+                viewport id "answer_vp":
+                    mousewheel True
+                    draggable True
+
+                    input:
+                        value VariableInputValue("player_answer")
+                        length 300
+                        size 22
+                        color "#f7efef"
+                        multiline True
+
+            # Buttons Row
             hbox:
-                spacing 40
-                
-                # tick Button (PASS)
-                imagebutton idle "correct":
-                    action [
-                        Hide("resultTestPopup"), 
-                        Hide("actionsPopup"), 
-                        Jump("act" + selectedAction + "Pass")
-                    ]
-                
-                # x button (FAIL)
-                imagebutton idle "incorrect":
-                    action [
-                        Hide("resultTestPopup"), 
-                        Hide("actionsPopup"), 
-                        Jump("act" + selectedAction + "Fail")
-                    ]
+                xalign 0.5
+                spacing 30
 
+                # Paste Button
+                textbutton "Paste":
+                    padding (25, 12)
+                    text_size 24
+                    background "#a8bfc5"
+                    hover_background "#cfdbe0"
+                    text_color "#4a3939"
+                    action Function(paste_clipboard_to_answer)
 
+                # Submit Button
+                textbutton "Submit Answer":
+                    padding (25, 12)
+                    text_size 24
+                    background "#ffd4e4"
+                    hover_background "#fde2f0"
+                    text_color "#4a3939"
+                    action [
+                        Hide("resultTestPopup"),
+                        Jump("evaluateActionAnswer")
+                    ]
 
 #====================================================================================================
 #-------------------------------------------------------------------------------------------------------------------
-label start: 
+label start:
+    # 1. Ask player to enter/paste notes first
+    call screen input_notes_screen
 
-#==========CHARACTER INTRO - ELIZA WALTON 
+    # Fallback default text if they didn't paste anything
+    if persistent_study_notes.strip() == "":
+        $ persistent_study_notes = "Photosynthesis is the process used by plants to convert light energy into chemical energy."
 
-
-#==========INTRO SCENE
+    # Intro sequence
     scene bedroom at bgSize with fade
     "6:00 AM..."
     show eliza sleepshockedeyesclosed at elizaSize with dissolve
@@ -317,6 +422,11 @@ label start:
     "Welcome to   {shader=wave}Exam Sheets & Heartbeats!{/shader}"
     "Can you help Eliza prepare for her exam today at 3?"
     "Goodluck!"
+
+    # Main game loop
+    scene bedroom at bgSize
+    show eliza fb sleepneutral at fbSpriteSize
+    call screen cs_mainmenu with fade
     
 
 #==========MAIN MENU THINGY
@@ -352,11 +462,10 @@ label start:
 
 
     label gameOver:
-        scene bedroom with dissolve
+        show expression Solid("#2b2a2aff")
         "Eliza completely burned out before taking her exam..."
         "GAME OVER"
         return  # Returns to main menu title screen
-
 
 
 label gameEnd:
@@ -406,5 +515,4 @@ label gameEnd:
 
     "--- GAME OVER ---"
     return
-
 
