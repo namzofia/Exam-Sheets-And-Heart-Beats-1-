@@ -7,7 +7,7 @@ init python:
     import pygame.constants
 
     # API Configuration
-    GEMINI_API_KEY = "AQ.Ab8RN6IC2tdb_TFgFrbq6x6ioAUtmKf7bVs9aDWUdvhzkZq73g"
+    GEMINI_API_KEY = ""
     ssl_context = ssl._create_unverified_context()
 
     # Clipboard Helpers
