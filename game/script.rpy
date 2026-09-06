@@ -13,69 +13,7 @@ transform bgSize:
     ypos 0.5 
 
 # Input Notes Screen Definition
-screen input_notes_screen():
-    modal True
-    add "classroom" at bgSize
-    add "#3f3b3b41" # Optional dark overlay for contrast
 
-    frame:
-        xalign 0.5
-        yalign 0.5
-        padding (40, 30)
-        xsize 1100              # Expanded main frame width
-        ysize 650               # Added fixed height for scale
-        background "#ffffff"
-
-        vbox:
-            spacing 25
-            text "Paste or enter your study notes below:" color "#553a3a" size 32 xalign 0.5
-
-            frame:
-                xsize 1020      # Expanded inner box width
-                ysize 420       # Expanded inner box height
-                background "#ffe9f3"
-                padding (20, 20)
-
-                hbox:
-                    spacing 15
-
-                    viewport id "notes_vp":
-                        mousewheel True
-                        draggable True
-
-                        input:
-                            value VariableInputValue("persistent_study_notes")
-                            length 2000
-                            size 24     # Increased text font size
-                            color "#694e4e"
-                            multiline True
-
-                    vbar:
-                        value YScrollValue("notes_vp")
-                        xsize 16        # Made scrollbar wider to match
-                        base_bar Frame(Solid("#e8d8d8"), 0, 0)
-                        thumb Frame(Solid("#b58294"), 0, 0)
-                        hover_thumb Frame(Solid("#dfa0ba"), 0, 0)
-
-            hbox:
-                xalign 0.5
-                spacing 30      # More breathing room between buttons
-
-                textbutton "Paste Notes":
-                    padding (25, 12)
-                    text_size 24
-                    background "#dbe8eb"
-                    hover_background "#ebf2f6"
-                    text_color "#4a3939"
-                    action Function(paste_clipboard_to_notes)
-
-                textbutton "Start Game":
-                    padding (25, 12)
-                    text_size 24
-                    background "#ffe6ef"
-                    hover_background "#fde2f0"
-                    text_color "#4a3939"
-                    action Return()
 
 #====================================================================================================================================================================================================
 
@@ -228,6 +166,10 @@ transform charShake:
 screen rsPopup():
     modal True #so that you can't interact outside of it
     add "relationships_pop" at buttonSize
+    text "Sorry! \n Nothing to see here! :)":
+        align (0.5, 0.5)
+        size 50
+        color "#3d2727" # dark text for contrast
 
     imagebutton at xSize:
         idle "x"
@@ -331,73 +273,183 @@ screen actionsPopup():
             imagebutton idle "2pmthomas" hover "2pmthomas_hvr" action [SetVariable("selectedAction", "2pmThomas"), Hide("actionsPopup"), Jump("triggerAiAction")]
             null
 
-
-#RESULT TEST POPUP
-# RESULT TEST POPUP
-screen resultTestPopup():
+#START SCREEN
+screen input_notes_screen():
     modal True
-    add "#e0d0d0ff"
+    add "classroom" at bgSize
+    add "#3f3b3b41"
 
+    # Outer border wrapper for main frame
     frame:
         xalign 0.5
         yalign 0.5
-        padding (40, 30)
-        xsize 1100              # Expanded frame width
-        background "#ffffff"
+        padding (3, 3) # Controls border thickness (3px)
+        background "#694e4e" # Brown border color
 
-        vbox:
-            spacing 25
+        frame:
+            padding (40, 30)
+            xsize 1100
+            ysize 650
+            background "#ffffff"
 
-            text "[ai_question]" xalign 0.5 size 26 color "#000000" text_align 0.5
+            vbox:
+                spacing 25
+                text "Paste or enter your study notes below:" color "#553a3a" size 32 xalign 0.5
 
-            frame:
-                xalign 0.5
-                xsize 1020      # Expanded input box width
-                ysize 120       # Expanded height for multiline text support
-                background "#2a2a38"
-                padding (15, 15)
+                # Outer border wrapper for text area
+                frame:
+                    padding (3, 3) # Border thickness
+                    background "#694e4e" # Brown border color
 
-                viewport id "answer_vp":
-                    mousewheel True
-                    draggable True
+                    frame:
+                        xsize 1014
+                        ysize 414
+                        background "#ffe9f3"
+                        padding (20, 20)
 
-                    input:
-                        value VariableInputValue("player_answer")
-                        length 300
-                        size 22
-                        color "#f7efef"
-                        multiline True
+                        hbox:
+                            spacing 15
 
-            # Buttons Row
-            hbox:
-                xalign 0.5
-                spacing 30
+                            viewport id "notes_vp":
+                                mousewheel True
+                                draggable True
 
-                # Paste Button
-                textbutton "Paste":
-                    padding (25, 12)
-                    text_size 24
-                    background "#a8bfc5"
-                    hover_background "#cfdbe0"
-                    text_color "#4a3939"
-                    action Function(paste_clipboard_to_answer)
+                                input:
+                                    value VariableInputValue("persistent_study_notes")
+                                    length 2000
+                                    size 24
+                                    color "#694e4e"
+                                    multiline True
 
-                # Submit Button
-                textbutton "Submit Answer":
-                    padding (25, 12)
-                    text_size 24
-                    background "#ffd4e4"
-                    hover_background "#fde2f0"
-                    text_color "#4a3939"
-                    action [
-                        Hide("resultTestPopup"),
-                        Jump("evaluateActionAnswer")
-                    ]
+                            vbar:
+                                value YScrollValue("notes_vp")
+                                xsize 16
+                                base_bar Frame(Solid("#e8d8d8"), 0, 0)
+                                thumb Frame(Solid("#b58294"), 0, 0)
+                                hover_thumb Frame(Solid("#dfa0ba"), 0, 0)
 
+                hbox:
+                    xalign 0.5
+                    spacing 30
+
+                    # Outer border wrapper for Paste Notes button
+                    frame:
+                        padding (3, 3)
+                        background "#694e4e"
+
+                        textbutton "Paste Notes":
+                            padding (25, 12)
+                            text_size 24
+                            background "#dbe8eb"
+                            hover_background "#ebf2f6"
+                            text_color "#4a3939"
+                            action Function(paste_clipboard_to_notes)
+
+                    # Outer border wrapper for Start Game button
+                    frame:
+                        padding (3, 3)
+                        background "#694e4e"
+
+                        textbutton "Start Game":
+                            padding (25, 12)
+                            text_size 24
+                            background "#ffe6ef"
+                            hover_background "#fff7fb"
+                            text_color "#4a3939"
+                            action Return()
+
+
+# RESULT TEST POPUP
+screen resultTestPopup():
+    modal True
+    add "classroom" at bgSize
+    add "#3f3b3b41"
+
+    # Outer border wrapper for main popup
+    frame:
+        xalign 0.5
+        yalign 0.5
+        padding (3, 3) # Border thickness
+        background "#694e4e" # Brown border color
+
+        frame:
+            padding (40, 30)
+            xsize 1100
+            background "#ffffff"
+
+            vbox:
+                spacing 25
+
+                text "[ai_question]" xalign 0.5 size 26 color "#553a3a" text_align 0.5
+
+                # Outer border wrapper for answer area
+                frame:
+                    xalign 0.5
+                    padding (3, 3) # Border thickness
+                    background "#694e4e" # Brown border color
+
+                    frame:
+                        xsize 1014
+                        ysize 114
+                        background "#ffe9f3"
+                        padding (15, 15)
+
+                        viewport id "answer_vp":
+                            mousewheel True
+                            draggable True
+
+                            input:
+                                value VariableInputValue("player_answer")
+                                length 300
+                                size 22
+                                color "#694e4e"
+                                multiline True
+
+                # Buttons Row
+                hbox:
+                    xalign 0.5
+                    spacing 30
+
+                    textbutton "Submit Answer":
+                        padding (25, 12)
+                        text_size 24
+                        background "#ffe6ef"
+                        hover_background "#fff7fb"
+                        text_color "#4a3939"
+                        action [
+                            Hide("resultTestPopup"),
+                            Jump("evaluateActionAnswer")
+                        ]
 #====================================================================================================
+
+screen audio_toggle_screen():
+    zorder 100
+
+    if renpy.music.is_playing(channel="music"):
+        imagebutton:
+            xalign 0.98
+            yalign 0.02
+            at transform:
+                zoom 0.8
+            idle "soundon"
+            hover "soundon_hvr"
+            action Stop("music")
+    else:
+        imagebutton:
+            xalign 0.98
+            yalign 0.02
+            at transform:
+                zoom 0.8
+            idle "soundoff"
+            hover "soundoff_hvr"
+            action Play("music", "bgMusic.mp3", loop=True)
 #-------------------------------------------------------------------------------------------------------------------
 label start:
-    # 1. Ask player to enter/paste notes first
+    
+    play music "bgMusic.mp3" loop
+    show screen audio_toggle_screen
+
+        # 1. Ask player to enter/paste notes first
     call screen input_notes_screen
 
     # Fallback default text if they didn't paste anything

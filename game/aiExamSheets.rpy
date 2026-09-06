@@ -45,18 +45,30 @@ init python:
         return text.replace("[", "[[").replace("{", "{{")
 
     # Gemini API Functions
-    def generate_ai_question(study_text):
+    def generate_ai_question(study_text, previous_questions=None):
         clean_key = urllib.parse.quote(GEMINI_API_KEY.strip())
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key={clean_key}"
         
         notes_content = str(study_text)[:2000] if study_text else "Photosynthesis in plants."
         
+        avoid_block = ""
+        if previous_questions:
+            joined = "\n".join(f"- {q}" for q in previous_questions[-10:])
+            avoid_block = (
+                "\n\nDo NOT repeat or closely rephrase any of these previously asked questions "
+                "-- pick a different fact or angle from the notes:\n" + joined
+            )
+        
         prompt = (
-            "You are an exam generator. Read the following study notes and generate ONE short test question. "
-            "Output ONLY the question text.\n\nNotes:\n" + notes_content
+            "You are an exam generator. Read the following study notes and generate ONE short test question, "
+            "picking a random fact or angle from the notes rather than always the first/most obvious one. "
+            "Output ONLY the question text." + avoid_block + "\n\nNotes:\n" + notes_content
         )
         
-        payload = {"contents": [{"parts": [{"text": prompt}]}]}
+        payload = {
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {"temperature": 1.3, "topP": 0.95}
+        }
         headers = {'Content-Type': 'application/json'}
         req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
         
@@ -96,9 +108,12 @@ init python:
         except Exception as e:
             return f"Error checking answer: {str(e)}"
 
+default asked_questions_history = []
+
 # Labels for Execution
 label triggerAiAction:
-    $ ai_question = generate_ai_question(persistent_study_notes)
+    $ ai_question = generate_ai_question(persistent_study_notes, asked_questions_history)
+    $ asked_questions_history.append(ai_question)
     $ player_answer = ""
     show screen resultTestPopup
     pause

@@ -15,9 +15,12 @@ label act1pmKristenPass:
     show kristen smileteeth at npcSize with dissolve
     show eliza smilepray at elizaSize with dissolve
     k "Okay let's lock in!!"
+    show kristen smilenoteeth at npcSize
+    show eliza blushsmile at elizaSize
     e "Yep!!"
-    scene school front with dissolve
-    "You manage to get 2 hours of work done!"
+    hide eliza with dissolve
+    hide kristen with dissolve
+    "Eliza and Kristed managed to get 2 hours of work done!"
     "You got: -20 Energy, +10 Social, +20 Readiness, +10 Focus"
     scene classroom at bgSize
     show eliza fb neutral at fbSpriteSize with fade
@@ -31,11 +34,17 @@ label act1pmKristenFail:
     $ currentTime += 1
     
     scene library with dissolve
-    show kristen mad at npcSize with dissolve
+    show eliza smilepray at elizaSize with dissolve
+    show kristen scared at npcSize with dissolve
+    e "Kristen omg you won't believe this..!"
+    show kristen mad at npcSize
+    show eliza shocked at elizaSize
     k "Eliza. I have a math test in 10 minutes and you distracted me from studying."
-    show eliza sleepshockedeyesclosed at elizaSize with dissolve
+    show eliza shockedpray at elizaSize
+    show kristen pissed at npcSize
     e "Oh..! Sorry..."
-    scene school front with dissolve
+    hide eliza with dissolve 
+    hide kristen with dissolve
     "You got: -10 Energy, -20 Social, +0 Readiness, -20 Focus"
     scene classroom at bgSize
     show eliza fb neutral at fbSpriteSize with fade
@@ -50,7 +59,7 @@ label act1pmNapPass:
     $ currentTime += 1
 
     scene classroom with dissolve
-    "You napped for 1 hour! You feel refreshed!! :D"
+    "Eliza napped for 1 hour! She feels so much more refreshed!! :D"
     "You got: +30 Energy, +0 Social, +0 Readiness, +10 Focus"
 
     scene classroom at bgSize
@@ -65,8 +74,8 @@ label act1pmNapFail:
     $ currentTime += 1
     
     scene classroom at bgSize with dissolve
-    "You tried to sleep but there was a bird chirping the whole time!!"
-    "Eliza couldn't get a wink of sleep :("
+    "Eliza tried to sleep but there was a bird chirping at the window..."
+    "She couldn't get a wink of sleep :("
     "You got:  -20 Energy, +0 Social, +0 Readiness, -10 Focus"
     
     scene classroom at bgSize
@@ -83,7 +92,7 @@ label act1pmStudyPass:
     $ currentTime += 1
 
     scene library with dissolve
-    "You studied for 1 hour!! ( • u < )"
+    "Eliza studied for 1 hour very productively!! ( • u < )"
     "You got: -10 Energy, +0 Social, +10 Readiness, +10 Focus"
 
     scene classroom at bgSize
@@ -98,7 +107,7 @@ label act1pmStudyFail:
     $ currentTime += 1
     
     scene classroom with dissolve
-    "You zoned out for 1 hour! (• o •)"
+    "Eliza tried to study but she was zoned out the whole time... (• o •)"
     "You got:  -10 Energy, +0 Social, +0 Readiness, -10 Focus"
 
     scene classroom at bgSize
